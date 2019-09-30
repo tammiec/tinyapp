@@ -9,12 +9,19 @@
 <body>
 
   <% include ./partials/_header %>
-  
+
   <div class='card text-center'>
       <div class='card-header'></div>
       <div class='card-body'>
         <h5 class='card-title'>TinyURL for: <%= longURL %></h5>
         <p class='card-text'>Short URL: <a href='/u/<%= shortURL %>'><%= shortURL %></a></p>
+        <form action='/urls' method='POST'>
+          <div class='form-group mb-2'>
+            <label for='editURL'>Edit this URL:</label>
+            <input type='text' name='editURL' placeholder='http://' style='width: 300px; margin: 1em'>
+            <button type='submit' class='btn btn-primary'>Submit</button>
+          </div>
+        </form>
       </div>
       <div class='card-footer text-muted'></div>
     </div>
