@@ -15,7 +15,6 @@ const generateRandomString = function() {
   return Math.random().toString(36).substr(2, 6);
 };
 
-
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
@@ -39,12 +38,19 @@ app.get('/urls/new', (req, res) => {
 
 app.post('/urls', (req, res) => {
   console.log(req.body);
-  res.send('Ok');
-})
+  let newId = generateRandomString();
+  urlDatabase[newId] = req.body.longURL;
+  res.redirect(`/urls/${newId}`);
+});
 
 app.get("/urls/:shortURL", (req, res) => {
   let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
   res.render("urls_show", templateVars);
+});
+
+app.get("/u/:shortURL", (req, res) => {
+  const longURL = urlDatabase[req.params.shortURL];
+  res.redirect(longURL);
 });
 
 app.listen(PORT, () => {
