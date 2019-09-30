@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/tammiec/tinyapp/issues"
   },
-  "homepage": "https://github.com/tammiec/tinyapp#readme"
+  "homepage": "https://github.com/tammiec/tinyapp#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
