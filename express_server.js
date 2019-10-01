@@ -47,6 +47,11 @@ app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
+app.get('/login', (req, res) => {
+  let templateVars = { user: users[req.cookies.user_id] };
+  res.render('urls_login', templateVars);
+});
+
 app.post('/login', (req, res) => {
   res
     .cookie('email', req.body.email)
@@ -65,7 +70,7 @@ app.get('/urls', (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-  let templateVars = { email: req.body.email, password: req.body.password, user: users[req.cookies.user_id] };
+  let templateVars = { user: users[req.cookies.user_id] };
   res.render('urls_register', templateVars);
 });
 
