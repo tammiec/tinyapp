@@ -15,7 +15,7 @@
     <% include ./partials/_header %>
 
     <main style='margin: 1em;'>
-      <h3>My URLs - TinyApp</h3>
+      <h3>My Tiny URLs</h3>
       <table class='table'>
         <thead>
           <tr>
@@ -29,7 +29,7 @@
           <% for(let url in urls) { %>
             <tr>
               <td><a href='/urls/<%= url %>'><%= url %></a></td>
-              <td><a href='<%= urls[url] %>'><%= urls[url] %></a></td>
+              <td><a href='<%= urls[url] %>'><%= urls[url].longURL %></a></td>
               <td>
                   <form method='GET' action='/urls/<%= url %>'>
                     <button type='submit' class='btn btn-outline-primary'>Edit</button>
