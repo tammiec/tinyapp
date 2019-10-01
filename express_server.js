@@ -13,10 +13,10 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
-const users = { 
+const users = {
   "userRandomID": {
-    id: "userRandomID", 
-    email: "user@example.com", 
+    id: "userRandomID",
+    email: "user@example.com",
     password: "purple-monkey-dinosaur"
   }
 };
@@ -29,7 +29,7 @@ const emailLookup = function(email) {
   const entries = Object.entries(users);
   for (let user of entries) {
     if (user[1].email === email) {
-      return true
+      return true;
     }
   }
   return false;
@@ -62,7 +62,7 @@ app.post('/logout', (req, res) => {
   res
     .clearCookie('user_id')
     .redirect('/urls');
-})
+});
 
 app.get('/urls', (req, res) => {
   let templateVars = { urls: urlDatabase, user: users[req.cookies.user_id] };
@@ -75,7 +75,7 @@ app.get('/register', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-  console.log('New User:', req.body)
+  console.log('New User:', req.body);
   if (req.body.email === '' || req.body.password === '' || emailLookup(req.body.email)) {
     res.sendStatus(400);
   } else {
@@ -93,7 +93,7 @@ app.post('/register', (req, res) => {
 });
 
 app.get('/urls/new', (req, res) => {
-  let templateVars = { user: users[req.cookies.user_id] }
+  let templateVars = { user: users[req.cookies.user_id] };
   res.render('urls_new', templateVars);
 });
 
@@ -109,7 +109,7 @@ app.get("/urls/:shortURL", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
-app.post("/urls/:shortURL", (req, res) => {  
+app.post("/urls/:shortURL", (req, res) => {
   console.log(req.body);
   urlDatabase[req.params.shortURL] = req.body.longURL;
   res.redirect(`/urls`);
