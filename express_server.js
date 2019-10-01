@@ -47,15 +47,15 @@ const urlsForUser = function(id) {
 }; 
 
 app.get("/", (req, res) => {
-  res.send("Hello!");
+  if (!users[req.cookies.user_id]) {
+    res.redirect('/login');
+  } else {
+    res.redirect('/urls');
+  }
 });
 
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
-});
-
-app.get("/hello", (req, res) => {
-  res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
 app.get('/login', (req, res) => {
@@ -98,7 +98,6 @@ app.get('/register', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-  console.log('New User:', req.body);
   if (req.body.email === '' || req.body.password === '' || emailLookup(req.body.email)) {
     res.sendStatus(400);
   } else {
@@ -108,7 +107,6 @@ app.post('/register', (req, res) => {
       email: req.body.email,
       password: req.body.password
     };
-    console.log('Current users:', users);
     res
       .cookie('user_id', newId)
       .redirect('/urls');
@@ -139,19 +137,28 @@ app.get("/urls/:shortURL", (req, res) => {
 });
 
 app.post("/urls/:shortURL", (req, res) => {
-  console.log(req.body);
-  urlDatabase[req.params.shortURL].longURL = req.body.longURL;
-  res.redirect(`/urls`);
+  let templateVars = { user: users[req.cookies.user_id] };
+  if (!templateVars.user || templateVars.user.id !== urlDatabase[req.params.shortURL].userID) {
+    res.render('urls_landing', templateVars);
+  } else {
+    urlDatabase[req.params.shortURL].longURL = req.body.longURL;
+    res.redirect(`/urls`);
+  }
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL];
+  const longURL = urlDatabase[req.params.shortURL].longURL;
   res.redirect(longURL);
 });
 
 app.post('/urls/:shortURL/delete', (req, res) => {
-  delete urlDatabase[req.params.shortURL];
-  res.redirect(`/urls`);
+  let templateVars = { user: users[req.cookies.user_id] };
+  if (!templateVars.user || templateVars.user.id !== urlDatabase[req.params.shortURL].userID) {
+    res.render('urls_landing', templateVars);
+  } else {
+    delete urlDatabase[req.params.shortURL];
+    res.redirect(`/urls`);
+  }
 });
 
 app.listen(PORT, () => {
