@@ -29,7 +29,7 @@ const emailLookup = function(email) {
   const entries = Object.entries(users);
   for (let user of entries) {
     if (user[1].email === email) {
-      return true;
+      return user[1].id;
     }
   }
   return false;
@@ -53,12 +53,20 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-  res
-    .cookie('email', req.body.email)
-    .redirect('/urls');
+  if (!emailLookup(req.body.email)) {
+    res.sendStatus(403);
+  } else if (req.body.password !== users[emailLookup(req.body.email)].password) {
+    res.sendStatus(403);
+  } else {
+    res
+      .cookie('user_id', users[emailLookup(req.body.email)].id)
+      .redirect('/urls');
+    console.log('User logged in successfully!')
+  }
 });
 
 app.post('/logout', (req, res) => {
+  console.log('User logged out!')
   res
     .clearCookie('user_id')
     .redirect('/urls');
