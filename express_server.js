@@ -2,9 +2,11 @@ const express = require("express");
 const app = express();
 const PORT = 8080; // default port 8080
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 app.set('view engine', 'ejs');
 app.use((bodyParser.urlencoded({extended: true})));
+app.use(cookieParser());
 
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
@@ -25,6 +27,13 @@ app.get("/urls.json", (req, res) => {
 
 app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
+});
+
+app.post('/login', (req, res) => {
+  console.log('New user detected:', req.body);
+  res
+    .cookie('username', req.body.username)
+    .redirect('/urls');
 });
 
 app.get('/urls', (req, res) => {
