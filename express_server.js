@@ -48,26 +48,24 @@ app.get("/hello", (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-  console.log('New user detected:', req.body);
   res
     .cookie('email', req.body.email)
     .redirect('/urls');
 });
 
 app.post('/logout', (req, res) => {
-  console.log('User logged out:', req.body);
   res
-    .clearCookie('email')
+    .clearCookie('user_id')
     .redirect('/urls');
 })
 
 app.get('/urls', (req, res) => {
-  let templateVars = { urls: urlDatabase, email: req.cookies.email };
+  let templateVars = { urls: urlDatabase, user: users[req.cookies.user_id] };
   res.render('urls_index', templateVars);
 });
 
 app.get('/register', (req, res) => {
-  let templateVars = { email: req.body.email, password: req.body.password };
+  let templateVars = { email: req.body.email, password: req.body.password, user: users[req.cookies.user_id] };
   res.render('urls_register', templateVars);
 });
 
@@ -90,7 +88,7 @@ app.post('/register', (req, res) => {
 });
 
 app.get('/urls/new', (req, res) => {
-  let templateVars = { email: req.cookies.email }
+  let templateVars = { user: users[req.cookies.user_id] }
   res.render('urls_new', templateVars);
 });
 
@@ -102,7 +100,7 @@ app.post('/urls', (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], email: req.cookies.email };
+  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], user: users[req.cookies.user_id] };
   res.render("urls_show", templateVars);
 });
 
@@ -123,5 +121,5 @@ app.post('/urls/:shortURL/delete', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}!`);
+  console.log(`TinyApp listening on port ${PORT}!`);
 });
