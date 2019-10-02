@@ -1,3 +1,4 @@
+// DEPENDENCIES, MIDDLEWARE, & MODULES
 const express = require("express");
 const app = express();
 const PORT = 8080; // default port 8080
@@ -13,6 +14,7 @@ app.use(cookieSession({
   keys: ['user_id']
 }));
 
+// DATABASES
 const urlDatabase = {
   b2xVn2: { longURL: "http://www.lighthouselabs.ca", userID: 'sampleID' },
   '9sm5xK': { longURL: "http://www.google.com", userID: 'sampleID' }
@@ -26,6 +28,7 @@ const users = {
   }
 };
 
+// ROUTE HANDLERS
 app.get("/", (req, res) => {
   if (!users[req.session.user_id]) {
     res.redirect('/login');
@@ -47,6 +50,7 @@ app.get('/login', (req, res) => {
   }
 });
 
+// Log in a user if they are in the users database and their password matches
 app.post('/login', (req, res) => {
   if (!getUserByEmail(req.body.email, users) || !bcrypt.compareSync(req.body.password, users[getUserByEmail(req.body.email, users)].password)) {
     res.status(403).send('This email and/or password does not exist. Please <a href="/login">try again</a> or <a href="/register">create an account</a>.');
@@ -66,7 +70,7 @@ app.post('/logout', (req, res) => {
 app.get('/urls', (req, res) => {
   let templateVars = { urls: urlsForUser(req.session.user_id, urlDatabase), user: users[req.session.user_id] };
   if (!templateVars.user) {
-    res.render('urls_landing', templateVars);
+    res.render('urls_denied', templateVars);
   } else {
     res.render('urls_index', templateVars);
   }
@@ -81,6 +85,7 @@ app.get('/register', (req, res) => {
   }
 });
 
+// add a new user to the database if their email and password are valid (ie. not empty strings) and if they don't already have an account
 app.post('/register', (req, res) => {
   if (req.body.email === '' || req.body.password === '') {
     res.status(400).send('This email and/or password is not valid. Please <a href="/register">try again</a> with a valid username and password.');
@@ -107,6 +112,7 @@ app.get('/urls/new', (req, res) => {
   }
 });
 
+// creates a new shortURL
 app.post('/urls', (req, res) => {
   let newId = generateRandomString();
   urlDatabase[newId] = {
@@ -122,23 +128,25 @@ app.get("/urls/:shortURL", (req, res) => {
   } else {
     let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, user: users[req.session.user_id] };
     if (!templateVars.user || templateVars.user.id !== urlDatabase[req.params.shortURL].userID) {
-      res.render('urls_landing', templateVars);
+      res.render('urls_denied', templateVars);
     } else {
       res.render("urls_show", templateVars);
     }
   }
 });
 
+// allows the user who owns the shortURL to change the longURL
 app.post("/urls/:shortURL", (req, res) => {
   let templateVars = { user: users[req.session.user_id] };
   if (!templateVars.user || templateVars.user.id !== urlDatabase[req.params.shortURL].userID) {
-    res.render('urls_landing', templateVars);
+    res.render('urls_denied', templateVars);
   } else {
     urlDatabase[req.params.shortURL].longURL = req.body.longURL;
     res.redirect(`/urls`);
   }
 });
 
+// redirects to longURL
 app.get("/u/:shortURL", (req, res) => {
   if (!urlDatabase[req.params.shortURL]) {
     res.send('This shortURL does not exist. Click <a href="/urls">here</a> to return to homepage.');
@@ -148,10 +156,11 @@ app.get("/u/:shortURL", (req, res) => {
   }
 });
 
+// allows the user who owns the shortURL to delete it from the database
 app.post('/urls/:shortURL/delete', (req, res) => {
   let templateVars = { user: users[req.session.user_id] };
   if (!templateVars.user || templateVars.user.id !== urlDatabase[req.params.shortURL].userID) {
-    res.render('urls_landing', templateVars);
+    res.render('urls_denied', templateVars);
   } else {
     delete urlDatabase[req.params.shortURL];
     res.redirect(`/urls`);
