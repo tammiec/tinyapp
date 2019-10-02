@@ -29,6 +29,8 @@ const users = {
 };
 
 // ROUTE HANDLERS
+
+// root redirects users to /urls
 app.get("/", (req, res) => {
   if (!users[req.session.user_id]) {
     res.redirect('/login');
@@ -41,6 +43,7 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
+// redirects to /urls if user is already logged in
 app.get('/login', (req, res) => {
   let templateVars = { user: users[req.session.user_id] };
   if (templateVars.user) {
@@ -61,12 +64,14 @@ app.post('/login', (req, res) => {
   }
 });
 
+// logs a user out and removes the session
 app.post('/logout', (req, res) => {
   console.log('User logged out!');
   req.session = null;
   res.redirect('/urls');
 });
 
+// shows all shortened urls, only accessible by users who are logged in
 app.get('/urls', (req, res) => {
   let templateVars = { urls: urlsForUser(req.session.user_id, urlDatabase), user: users[req.session.user_id] };
   if (!templateVars.user) {
@@ -76,6 +81,7 @@ app.get('/urls', (req, res) => {
   }
 });
 
+// redirects to /urls if user is already logged in
 app.get('/register', (req, res) => {
   let templateVars = { user: users[req.session.user_id] };
   if (templateVars.user) {
@@ -103,6 +109,7 @@ app.post('/register', (req, res) => {
   }
 });
 
+// redirects to /login if user is not logged in
 app.get('/urls/new', (req, res) => {
   let templateVars = { user: users[req.session.user_id] };
   if (!templateVars.user) {
@@ -122,6 +129,7 @@ app.post('/urls', (req, res) => {
   res.redirect(`/urls/${newId}`);
 });
 
+// displays the shortURL page only to the owner of that shortURL
 app.get("/urls/:shortURL", (req, res) => {
   if (!urlDatabase[req.params.shortURL]) {
     res.send('This shortURL does not exist. Click <a href="/urls">here</a> to return to homepage.');
