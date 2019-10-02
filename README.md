@@ -4,10 +4,17 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 ## Final Product
 
-["Screenshot of My URLs Page - only shown when user is logged in"](/docs/urls-page.png)
-["Screenshot of Access Denied Page - shown when user is not logged in to the My URLs page or logged in to an account that does not own the shortURL"](/docs/register-page.png)
-["Screenshot of Registration Page"](/docs/register-page.png)
-["Screenshot of ShortURL Page - also an example of what the app looks like on mobile"](/docs/short-url-page.png)
+Screenshot of My URLs Page - only shown when the user is logged in:
+![My URLs Page](/docs/urls-page.png)
+
+Screenshot of Access Denied Page - shown when there is either no user logged in or the user who is logged in does not have access to that page (ie. users can only view their own URLs):
+![Access Denied Page](/docs/register-page.png)
+
+Screenshot of Registration Page:
+![Registration Page](/docs/register-page.png)
+
+Screenshot of ShortURL Page - also shows an example of what the app looks like on mobile:
+![ShortURL Page](/docs/short-url-page.png)
 
 ## Dependencies
 
