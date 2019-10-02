@@ -9,7 +9,6 @@ const getUserByEmail = function(email, database) {
       return user[1].id;
     }
   }
-  return false;
 };
 
 const urlsForUser = function(id, database) {
