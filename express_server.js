@@ -5,6 +5,7 @@ const PORT = 8080; // default port 8080
 const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt');
+const methodOverride = require('method-override');
 const { generateRandomString, getUserByEmail, urlsForUser } = require('./helpers');
 
 app.set('view engine', 'ejs');
@@ -13,6 +14,7 @@ app.use(cookieSession({
   name: 'session',
   keys: ['user_id']
 }));
+app.use(methodOverride('_method'));
 
 // DATABASES
 const urlDatabase = {
@@ -65,7 +67,7 @@ app.post('/login', (req, res) => {
 });
 
 // logs a user out and removes the session
-app.post('/logout', (req, res) => {
+app.delete('/logout', (req, res) => {
   console.log('User logged out!');
   req.session = null;
   res.redirect('/urls');
@@ -144,7 +146,8 @@ app.get("/urls/:shortURL", (req, res) => {
 });
 
 // allows the user who owns the shortURL to change the longURL
-app.post("/urls/:shortURL", (req, res) => {
+app.put("/urls/:shortURL", (req, res) => {
+  console.log('Url before', urlDatabase[req.params.shortURL]);
   let templateVars = { user: users[req.session.user_id] };
   if (!templateVars.user || templateVars.user.id !== urlDatabase[req.params.shortURL].userID) {
     res.render('urls_denied', templateVars);
@@ -152,6 +155,7 @@ app.post("/urls/:shortURL", (req, res) => {
     urlDatabase[req.params.shortURL].longURL = req.body.longURL;
     res.redirect(`/urls`);
   }
+  console.log('Url after', urlDatabase[req.params.shortURL]);
 });
 
 // redirects to longURL
@@ -165,7 +169,7 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 // allows the user who owns the shortURL to delete it from the database
-app.post('/urls/:shortURL/delete', (req, res) => {
+app.delete('/urls/:shortURL', (req, res) => {
   let templateVars = { user: users[req.session.user_id] };
   if (!templateVars.user || templateVars.user.id !== urlDatabase[req.params.shortURL].userID) {
     res.render('urls_denied', templateVars);

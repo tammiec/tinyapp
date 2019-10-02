@@ -24,6 +24,7 @@ Screenshot of ShortURL Page - also shows an example of what the app looks like o
 - bcrypt
 - body-parser
 - cookie-session
+- method-override
 
 ## Getting Started
 
