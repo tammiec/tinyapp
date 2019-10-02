@@ -3,6 +3,7 @@ const app = express();
 const PORT = 8080; // default port 8080
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
 
 app.set('view engine', 'ejs');
 app.use((bodyParser.urlencoded({extended: true})));
@@ -17,7 +18,7 @@ const users = {
   "sampleID": {
     id: "sampleID",
     email: "user@example.com",
-    password: "purple-monkey-dinosaur"
+    password: bcrypt.hashSync("purple-monkey-dinosaur", 10)
   }
 };
 
@@ -66,7 +67,7 @@ app.get('/login', (req, res) => {
 app.post('/login', (req, res) => {
   if (!emailLookup(req.body.email)) {
     res.sendStatus(403);
-  } else if (req.body.password !== users[emailLookup(req.body.email)].password) {
+  } else if (!bcrypt.compareSync(req.body.password, users[emailLookup(req.body.email)].password)) {
     res.sendStatus(403);
   } else {
     res
@@ -105,8 +106,9 @@ app.post('/register', (req, res) => {
     users[newId] = {
       id: newId,
       email: req.body.email,
-      password: req.body.password
+      password: bcrypt.hashSync(req.body.password, 10)
     };
+    console.log('All users:', users);
     res
       .cookie('user_id', newId)
       .redirect('/urls');
