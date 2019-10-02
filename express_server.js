@@ -29,8 +29,8 @@ const generateRandomString = function() {
   return Math.random().toString(36).substr(2, 6);
 };
 
-const emailLookup = function(email) {
-  const entries = Object.entries(users);
+const getUserByEmail = function(email, database) {
+  const entries = Object.entries(database);
   for (let user of entries) {
     if (user[1].email === email) {
       return user[1].id;
@@ -68,12 +68,12 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-  if (!emailLookup(req.body.email)) {
+  if (!getUserByEmail(req.body.email, users)) {
     res.sendStatus(403);
-  } else if (!bcrypt.compareSync(req.body.password, users[emailLookup(req.body.email)].password)) {
+  } else if (!bcrypt.compareSync(req.body.password, users[getUserByEmail(req.body.email, users)].password)) {
     res.sendStatus(403);
   } else {
-    req.session.user_id = users[emailLookup(req.body.email)].id
+    req.session.user_id = users[getUserByEmail(req.body.email, users)].id
     res.redirect('/urls');
     console.log('User logged in successfully!')
   }
@@ -100,7 +100,7 @@ app.get('/register', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-  if (req.body.email === '' || req.body.password === '' || emailLookup(req.body.email)) {
+  if (req.body.email === '' || req.body.password === '' || getUserByEmail(req.body.email, users)) {
     res.sendStatus(400);
   } else {
     let newId = generateRandomString();
