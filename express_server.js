@@ -4,6 +4,7 @@ const PORT = 8080; // default port 8080
 const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt');
+const { generateRandomString, getUserByEmail, urlsForUser } = require('./helpers');
 
 app.set('view engine', 'ejs');
 app.use((bodyParser.urlencoded({extended: true})));
@@ -24,31 +25,6 @@ const users = {
     password: bcrypt.hashSync("purple-monkey-dinosaur", 10)
   }
 };
-
-const generateRandomString = function() {
-  return Math.random().toString(36).substr(2, 6);
-};
-
-const getUserByEmail = function(email, database) {
-  const entries = Object.entries(database);
-  for (let user of entries) {
-    if (user[1].email === email) {
-      return user[1].id;
-    }
-  }
-  return false;
-};
-
-const urlsForUser = function(id) {
-  let keys = Object.keys(urlDatabase);
-  let filteredURL = {};
-  for (let key of keys) {
-    if (urlDatabase[key].userID === id) {
-      filteredURL[key] = urlDatabase[key];
-    }
-  }
-  return filteredURL;
-}; 
 
 app.get("/", (req, res) => {
   if (!users[req.session.user_id]) {
@@ -86,7 +62,7 @@ app.post('/logout', (req, res) => {
 });
 
 app.get('/urls', (req, res) => {
-  let templateVars = { urls: urlsForUser(req.session.user_id), user: users[req.session.user_id] };
+  let templateVars = { urls: urlsForUser(req.session.user_id, urlDatabase), user: users[req.session.user_id] };
   if (!templateVars.user) {
     res.render('urls_landing', templateVars);
   } else {
