@@ -18,8 +18,12 @@ app.use(methodOverride('_method'));
 
 // DATABASES
 const urlDatabase = {
-  b2xVn2: { longURL: "http://www.lighthouselabs.ca", userID: 'sampleID' },
-  '9sm5xK': { longURL: "http://www.google.com", userID: 'sampleID' }
+  b2xVn2: { 
+    longURL: "http://www.lighthouselabs.ca", 
+    userID: 'sampleID',
+    totalVisitors: 0,
+    uniqueVisitors: 0,
+  }
 };
 
 const users = {
@@ -124,7 +128,7 @@ app.post('/urls', (req, res) => {
   let newId = generateRandomString();
   urlDatabase[newId] = {
     longURL: req.body.longURL,
-    userID: req.session.user_id
+    userID: req.session.user_id,
   };
   res.redirect(`/urls/${newId}`);
 });
@@ -134,7 +138,8 @@ app.get("/urls/:shortURL", (req, res) => {
   if (!urlDatabase[req.params.shortURL]) {
     res.send('This shortURL does not exist. Click <a href="/urls">here</a> to return to homepage.');
   } else {
-    let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, user: users[req.session.user_id] };
+    let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, user: users[req.session.user_id], uniqueVisitors: urlDatabase[req.params.shortURL].uniqueVisitors, totalVisitors: urlDatabase[req.params.shortURL].totalVisitors };
+    console.log(templateVars);
     if (!templateVars.user || templateVars.user.id !== urlDatabase[req.params.shortURL].userID) {
       res.render('urls_denied', templateVars);
     } else {
@@ -160,6 +165,8 @@ app.get("/u/:shortURL", (req, res) => {
     res.send('This shortURL does not exist. Click <a href="/urls">here</a> to return to homepage.');
   } else {
     const longURL = urlDatabase[req.params.shortURL].longURL;
+    urlDatabase[req.params.shortURL].totalVisitors += 1;
+    urlDatabase[req.params.shortURL].uniqueVisitors += 1;
     res.redirect(longURL);
   }
 });
