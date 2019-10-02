@@ -3,13 +3,13 @@ const { getUserByEmail, urlsForUser } = require('../helpers.js');
 
 const testUsers = {
   "userRandomID": {
-    id: "userRandomID", 
-    email: "user@example.com", 
+    id: "userRandomID",
+    email: "user@example.com",
     password: "purple-monkey-dinosaur"
   },
   "user2RandomID": {
-    id: "user2RandomID", 
-    email: "user2@example.com", 
+    id: "user2RandomID",
+    email: "user2@example.com",
     password: "dishwasher-funk"
   }
 };
@@ -21,14 +21,14 @@ const urlDatabase = {
 
 describe('getUserByEmail', () => {
   it('should return a user id with valid email', () => {
-    const userId = getUserByEmail("user@example.com", testUsers)
+    const userId = getUserByEmail("user@example.com", testUsers);
     const expectedOutput = "userRandomID";
     assert.equal(userId, expectedOutput);
   });
   it('should return undefined for an email that is not in the database', () => {
     const userId = getUserByEmail('hello@example.com', testUsers);
     assert.isUndefined(userId);
-  })
+  });
 });
 
 describe('urlsForUser', () => {
@@ -44,5 +44,5 @@ describe('urlsForUser', () => {
     const userUrls = urlsForUser('sampleID2', urlDatabase);
     const expectedOutput = {};
     assert.deepEqual(userUrls, expectedOutput);
-  })
+  });
 });

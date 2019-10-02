@@ -8,7 +8,7 @@ const { generateRandomString, getUserByEmail, urlsForUser } = require('./helpers
 
 app.set('view engine', 'ejs');
 app.use((bodyParser.urlencoded({extended: true})));
-app.use(cookieSession( {
+app.use(cookieSession({
   name: 'session',
   keys: ['user_id']
 }));
@@ -51,14 +51,14 @@ app.post('/login', (req, res) => {
   if (!getUserByEmail(req.body.email, users) || !bcrypt.compareSync(req.body.password, users[getUserByEmail(req.body.email, users)].password)) {
     res.status(403).send('This email and/or password does not exist. Please <a href="/login">try again</a> or <a href="/register">create an account</a>.');
   } else {
-    req.session.user_id = users[getUserByEmail(req.body.email, users)].id
+    req.session.user_id = users[getUserByEmail(req.body.email, users)].id;
     res.redirect('/urls');
-    console.log('User logged in successfully!')
+    console.log('User logged in successfully!');
   }
 });
 
 app.post('/logout', (req, res) => {
-  console.log('User logged out!')
+  console.log('User logged out!');
   req.session = null;
   res.redirect('/urls');
 });
@@ -118,7 +118,7 @@ app.post('/urls', (req, res) => {
 
 app.get("/urls/:shortURL", (req, res) => {
   if (!urlDatabase[req.params.shortURL]) {
-    res.send('This shortURL does not exist. Click <a href="/urls">here</a> to return to homepage.')
+    res.send('This shortURL does not exist. Click <a href="/urls">here</a> to return to homepage.');
   } else {
     let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, user: users[req.session.user_id] };
     if (!templateVars.user || templateVars.user.id !== urlDatabase[req.params.shortURL].userID) {
@@ -141,7 +141,7 @@ app.post("/urls/:shortURL", (req, res) => {
 
 app.get("/u/:shortURL", (req, res) => {
   if (!urlDatabase[req.params.shortURL]) {
-    res.send('This shortURL does not exist. Click <a href="/urls">here</a> to return to homepage.')
+    res.send('This shortURL does not exist. Click <a href="/urls">here</a> to return to homepage.');
   } else {
     const longURL = urlDatabase[req.params.shortURL].longURL;
     res.redirect(longURL);

@@ -20,10 +20,10 @@ const urlsForUser = function(id, database) {
     }
   }
   return filteredURL;
-}; 
+};
 
 module.exports = {
   generateRandomString,
   getUserByEmail,
   urlsForUser
-}
+};
