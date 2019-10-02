@@ -62,13 +62,11 @@ app.post('/login', (req, res) => {
   } else {
     req.session.user_id = users[getUserByEmail(req.body.email, users)].id;
     res.redirect('/urls');
-    console.log('User logged in successfully!');
   }
 });
 
 // logs a user out and removes the session
 app.delete('/logout', (req, res) => {
-  console.log('User logged out!');
   req.session = null;
   res.redirect('/urls');
 });
@@ -147,7 +145,6 @@ app.get("/urls/:shortURL", (req, res) => {
 
 // allows the user who owns the shortURL to change the longURL
 app.put("/urls/:shortURL", (req, res) => {
-  console.log('Url before', urlDatabase[req.params.shortURL]);
   let templateVars = { user: users[req.session.user_id] };
   if (!templateVars.user || templateVars.user.id !== urlDatabase[req.params.shortURL].userID) {
     res.render('urls_denied', templateVars);
@@ -155,7 +152,6 @@ app.put("/urls/:shortURL", (req, res) => {
     urlDatabase[req.params.shortURL].longURL = req.body.longURL;
     res.redirect(`/urls`);
   }
-  console.log('Url after', urlDatabase[req.params.shortURL]);
 });
 
 // redirects to longURL

@@ -17,44 +17,48 @@
   <div class='card text-center'>
 
     <div class='card-body'>
-      <h5 class='card-title'>TinyURL for: <%= longURL %></h5>
+      <h4 class='card-title'>TinyURL for: <%= longURL %></h4>
       <p class='card-text'>Short URL: <a href='/u/<%= shortURL %>'><%= shortURL %></a></p>
     </div>
 
-  <div class="card-group">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Total Number of Visitors</h5>
-          <p class="card-text">###some number###</p>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Number of Unique Visitors</h5>
-          <p class="card-text">###some other number###</p>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Visitor Details</h5>
-          <p class="card-text">
-            <table class='table'>
-              <thead>
-                  <tr>
-                    <th scope="col">Visitor ID</th>
-                    <th scope="col">Timestamp</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr>
-                    <td>###ID###</td>
-                    <td>###time###</td>
-                  </tr>
-                </tbody>
-            </table>
-          </p>
-        </div>
-      </div>
+    <div class="card-body">
+      <h5 class="card-title">Number of Visitors</h5>
+      <p class="card-text">
+        <table class='table'>
+          <thead>
+            <tr>
+              <th scope="col">Total Visitors</th>
+              <th scope="col">Unique Visitors</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>###Total###</td>
+              <td>###Unique###</td>
+            </tr>
+          </tbody>
+        </table>
+      </p>
+    </div>
+
+    <div class="card-body">
+      <h5 class="card-title">Visitor Details</h5>
+      <p class="card-text">
+        <table class='table'>
+          <thead>
+            <tr>
+              <th scope="col">Visitor ID</th>
+              <th scope="col">Timestamp</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>###ID###</td>
+              <td>###time###</td>
+            </tr>
+          </tbody>
+        </table>
+      </p>
     </div>
 
     <div class='card-footer text-muted' style='padding-top: 1.5rem'>
