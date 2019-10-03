@@ -16,54 +16,56 @@
 
   <div class='card text-center'>
 
-    <div class='card-body'>
+    <div class='card-body' style='margin-top: 0.5em'>
       <h4 class='card-title'>TinyURL for: <%= longURL %></h4>
       <p class='card-text'>Short URL: <a href='/u/<%= shortURL %>'><%= shortURL %></a></p>
     </div>
 
-    <div class="card-body">
-      <h5 class="card-title">Number of Visitors</h5>
-      <p class="card-text">
-        <table class='table'>
-          <thead>
-            <tr>
-              <th scope="col">Total Visitors</th>
-              <th scope="col">Unique Visitors</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><%= totalVisitors %></td>
-              <td><%= uniqueVisitors %></td>
-            </tr>
-          </tbody>
-        </table>
-      </p>
+    <div class="card-deck" style='margin: 1em'>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Number of Visitors</h5>
+          <table class='table'>
+            <thead>
+              <tr>
+                <th scope="col">Total Visitors</th>
+                <th scope="col">Unique Visitors</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><%= totalVisitors %></td>
+                <td><%= uniqueVisitors %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Visitor History</h5>
+          <table class='table'>
+            <thead>
+              <tr>
+                <th scope="col">Visitor ID</th>
+                <th scope="col">Timestamp</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for(let log of visitHistory) { %>
+              <tr>
+                <td><%= log.visitor %></td>
+                <td><%= log.timestamp %></td>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
-    <div class="card-body">
-      <h5 class="card-title">Visitor Details</h5>
-      <p class="card-text">
-        <table class='table'>
-          <thead>
-            <tr>
-              <th scope="col">Visitor ID</th>
-              <th scope="col">Timestamp</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% for(let log of visitHistory) { %>
-            <tr>
-              <td><%= log.visitor %></td>
-              <td><%= log.timestamp %></td>
-            </tr>
-            <% } %>
-          </tbody>
-        </table>
-      </p>
-    </div>
 
-    <div class='card-footer text-muted' style='padding-top: 1.5rem'>
+    <div class='card-footer text-muted' style='padding-top: 1.5rem; margin-top: 1.5em'>
       <form action='/urls/<%= shortURL %>?_method=PUT' method='POST'>
         <div class='form-group mb-2'>
           <h4>Edit this URL</h4>
@@ -72,8 +74,8 @@
           <button type='submit' class='btn btn-dark'>Submit</button>
         </div>
       </form>
-    </div>
 
+    </div>
   </div>
 
   <!-- Bootstrap JS -->
