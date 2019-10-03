@@ -52,10 +52,12 @@
             </tr>
           </thead>
           <tbody>
+            <% for(let log of visitHistory) { %>
             <tr>
-              <td>###ID###</td>
-              <td>###time###</td>
+              <td><%= log.visitor %></td>
+              <td><%= log.timestamp %></td>
             </tr>
+            <% } %>
           </tbody>
         </table>
       </p>
