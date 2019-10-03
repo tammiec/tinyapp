@@ -64,16 +64,6 @@ app.delete('/logout', (req, res) => {
   res.redirect('/urls');
 });
 
-// shows all shortened urls, only accessible by users who are logged in
-app.get('/urls', (req, res) => {
-  let templateVars = { urls: urlsForUser(req.session.user_id, urlDatabase), user: users[req.session.user_id] };
-  if (!templateVars.user) {
-    res.render('urls_denied', templateVars);
-  } else {
-    res.render('urls_index', templateVars);
-  }
-});
-
 // redirects to /urls if user is already logged in
 app.get('/register', (req, res) => {
   let templateVars = { user: users[req.session.user_id] };
@@ -98,13 +88,13 @@ app.post('/register', (req, res) => {
   }
 });
 
-// redirects to /login if user is not logged in
-app.get('/urls/new', (req, res) => {
-  let templateVars = { user: users[req.session.user_id] };
+// shows all shortened urls, only accessible by users who are logged in
+app.get('/urls', (req, res) => {
+  let templateVars = { urls: urlsForUser(req.session.user_id, urlDatabase), user: users[req.session.user_id] };
   if (!templateVars.user) {
-    res.redirect('/login');
+    res.render('urls_denied', templateVars);
   } else {
-    res.render('urls_new', templateVars);
+    res.render('urls_index', templateVars);
   }
 });
 
@@ -113,6 +103,16 @@ app.post('/urls', (req, res) => {
   let newId = generateRandomString();
   urlDatabase[newId] = new URL(req.body.longURL, req.session.user_id);
   res.redirect(`/urls/${newId}`);
+});
+
+// redirects to /login if user is not logged in
+app.get('/urls/new', (req, res) => {
+  let templateVars = { user: users[req.session.user_id] };
+  if (!templateVars.user) {
+    res.redirect('/login');
+  } else {
+    res.render('urls_new', templateVars);
+  }
 });
 
 // displays the shortURL page only to the owner of that shortURL
@@ -147,6 +147,17 @@ app.put("/urls/:shortURL", (req, res) => {
   }
 });
 
+// allows the user who owns the shortURL to delete it from the database
+app.delete('/urls/:shortURL', (req, res) => {
+  let templateVars = { user: users[req.session.user_id] };
+  if (!templateVars.user || templateVars.user.id !== urlDatabase[req.params.shortURL].userID) {
+    res.render('urls_denied', templateVars);
+  } else {
+    delete urlDatabase[req.params.shortURL];
+    res.redirect(`/urls`);
+  }
+});
+
 // redirects to longURL
 app.get("/u/:shortURL", (req, res) => {
   if (!urlDatabase[req.params.shortURL]) {
@@ -163,17 +174,6 @@ app.get("/u/:shortURL", (req, res) => {
     urlDatabase[req.params.shortURL].countUniqueVisitors(visitorID);
     urlDatabase[req.params.shortURL].addVisitHistory(visitorID);
     res.cookie('visitor', visitorID).redirect(longURL);
-  }
-});
-
-// allows the user who owns the shortURL to delete it from the database
-app.delete('/urls/:shortURL', (req, res) => {
-  let templateVars = { user: users[req.session.user_id] };
-  if (!templateVars.user || templateVars.user.id !== urlDatabase[req.params.shortURL].userID) {
-    res.render('urls_denied', templateVars);
-  } else {
-    delete urlDatabase[req.params.shortURL];
-    res.redirect(`/urls`);
   }
 });
 
