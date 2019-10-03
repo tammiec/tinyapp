@@ -21,8 +21,8 @@ app.use(methodOverride('_method'));
 
 // DATABASES
 const urlDatabase = {
-  b2xVn2: { 
-    longURL: "http://www.lighthouselabs.ca", 
+  b2xVn2: {
+    longURL: "http://www.lighthouselabs.ca",
     userID: 'sampleID',
     totalVisitors: 0,
     uniqueVisitors: 0,
@@ -134,11 +134,11 @@ app.get("/urls/:shortURL", (req, res) => {
   if (!urlDatabase[req.params.shortURL]) {
     res.send('This shortURL does not exist. Click <a href="/urls">here</a> to return to homepage.');
   } else {
-    let templateVars = { 
-      shortURL: req.params.shortURL, 
-      longURL: urlDatabase[req.params.shortURL].longURL, 
-      user: users[req.session.user_id], 
-      uniqueVisitors: urlDatabase[req.params.shortURL].uniqueVisitors, 
+    let templateVars = {
+      shortURL: req.params.shortURL,
+      longURL: urlDatabase[req.params.shortURL].longURL,
+      user: users[req.session.user_id],
+      uniqueVisitors: urlDatabase[req.params.shortURL].uniqueVisitors,
       totalVisitors: urlDatabase[req.params.shortURL].totalVisitors,
       visitHistory: urlDatabase[req.params.shortURL].visitHistory
     };

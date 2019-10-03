@@ -23,21 +23,21 @@ class URL {
     const newVisitor = {
       visitor: visitor,
       timestamp: new Date()
-    }
+    };
     this.visitHistory.push(newVisitor);
-  } 
-};
+  }
+}
 
 // creates a new user
 class User {
   constructor(id, email, password) {
     this.id = id,
     this.email = email,
-    this.password = bcrypt.hashSync(password, 10)
+    this.password = bcrypt.hashSync(password, 10);
   }
-};
+}
 
 module.exports = {
   URL,
   User
-}
+};
