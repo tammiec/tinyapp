@@ -20,22 +20,8 @@ app.use(cookieSession({
 app.use(methodOverride('_method'));
 
 // DATABASES
-const urlDatabase = {
-  b2xVn2: {
-    longURL: "http://www.lighthouselabs.ca",
-    userID: 'sampleID',
-    totalVisitors: 0,
-    uniqueVisitors: 0,
-  }
-};
-
-const users = {
-  "sampleID": {
-    id: "sampleID",
-    email: "user@example.com",
-    password: bcrypt.hashSync("purple-monkey-dinosaur", 10)
-  }
-};
+const urlDatabase = {};
+const users = {};
 
 // ROUTE HANDLERS
 
