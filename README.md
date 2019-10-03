@@ -16,10 +16,10 @@ Screenshot of My URLs Page - only shown when the user is logged in:
 Screenshot of ShortURL Page - displays analytics for total number of visitors, number of unique visitors, and a visitor history log containing a unique visitor ID and timestamp:
 ![ShortURL Page](/docs/short-url-page.png)
 
-Screenshot of ShortURL Page - on mobile:
+Screenshot of ShortURL Page - mobile view:
 ![Short URL Page - Mobile](/docs/short-url-mobile.png)
 
-Screenshot of Create New URL Page - on mobile:
+Screenshot of Create New URL Page - mobile view:
 ![Create New Page - Mobile](/docs/new-mobile.png)
 
 
