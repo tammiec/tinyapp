@@ -148,7 +148,7 @@ app.put("/urls/:shortURL", (req, res) => {
 });
 
 // allows the user who owns the shortURL to delete it from the database
-app.delete('/urls/:shortURL', (req, res) => {
+app.delete('/urls/:shortURL/delete', (req, res) => {
   let templateVars = { user: users[req.session.user_id] };
   if (!templateVars.user || templateVars.user.id !== urlDatabase[req.params.shortURL].userID) {
     res.render('urls_denied', templateVars);
